@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 # Load the pre-trained model
 model_name = 'basic_rnn'
-bundle = music_rnn.read_bundle_file('path/to/your/model.mag')  # Specify the path to the model
+bundle = music_rnn.read_bundle_file('basic_rnn.mag')  # Make sure this path is correct
 generator = music_rnn.MusicRNNModel(bundle)
 
 @app.route('/')
@@ -19,7 +19,7 @@ def home():
 def generate_music():
     num_steps = int(request.form.get('num_steps', 64))
     sequence = generator.generate(num_steps=num_steps, temperature=1.0)
-    
+
     # Save the generated sequence to a MIDI file
     midi_file_path = 'generated_music.mid'
     note_sequence_io.note_sequence_to_midi_file(sequence, midi_file_path)
@@ -28,3 +28,4 @@ def generate_music():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
