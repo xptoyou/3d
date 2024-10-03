@@ -3,15 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Generator</title>
+    <title>Seif's Personal Page</title>
+    <style>
+        /* Your existing styles */
+    </style>
 </head>
 <body>
-    <h1>Music Generator</h1>
-    <form action="/generate" method="POST">
-        <label for="num_steps">Number of Steps:</label>
-        <input type="number" id="num_steps" name="num_steps" value="64" min="1" required>
-        <button type="submit">Generate Music</button>
-    </form>
+
+<header>
+    <h1>Welcome to Seif's Page</h1>
+    <p>Enter your email to receive a verification code!</p>
+</header>
+
+<section id="emailSection">
+    <div class="form-container">
+        <input type="email" id="emailInput" placeholder="Enter your email" required>
+        <button onclick="sendVerificationCode()">Send Verification Code</button>
+    </div>
+</section>
+
+<section id="verificationSection" style="display: none;">
+    <div class="form-container">
+        <label for="verificationCode">Verification Code:</label>
+        <input type="text" id="verificationCode" placeholder="Enter Verification Code" required>
+        <button onclick="verifyCode()">Verify Code</button>
+    </div>
+</section>
+
+<script>
+    let validCode = "";
+
+    function sendVerificationCode() {
+        const email = document.getElementById('emailInput').value;
+        if (email) {
+            fetch('http://localhost:3000/send-code', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email })
+            })
+            .then(response => response.json())
+            .then(data => {
+                validCode = data.code; // Store the code received from the server
+                document.getElementById('emailSection').style.display = 'none';
+                document.getElementById('verificationSection').style.display = 'block';
+                alert(`Verification code sent to ${email}.`);
+            })
+            .catch(error => {
+                alert('Error sending email. Please try again later.');
+                console.error(error);
+            });
+        } else {
+            alert("Please enter a valid email address.");
+        }
+    }
+
+    function verifyCode() {
+        const enteredCode = document.getElementById('verificationCode').value;
+        if (enteredCode === validCode) {
+            alert("Code verified! You can now access the coding section.");
+            // Code to show the coding section here
+        } else {
+            alert("Invalid verification code. Please try again.");
+        }
+    }
+</script>
+
 </body>
 </html>
+
 
